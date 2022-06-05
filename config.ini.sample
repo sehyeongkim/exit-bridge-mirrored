@@ -1,0 +1,5 @@
+[log]
+level = debug
+directory = ./log
+max_mbytes = 10
+backup_count = 5
