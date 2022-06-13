@@ -3,3 +3,18 @@ level = debug
 directory = ./log
 max_mbytes = 10
 backup_count = 5
+
+[mysql]
+host = localhost
+port = 3306
+user = root
+passwd = test
+database = postgres
+schema = exit-bridge
+timeout_ms = 10000
+
+[sqlalchemy]
+pool_size = 5
+pool_recycle = -1
+pool_timeout = 30
+max_overflow = 50
