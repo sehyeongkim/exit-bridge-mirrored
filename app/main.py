@@ -27,4 +27,4 @@ async def shutdown_event():
 @app.get('/hello')
 async def hello(user_id, session: AsyncSession = Depends(get_session)):
     user = await UserService(session).get_user(user_id)
-    return {'result': f'hello {user.name}'}
+    return {'result': f'hello {user.email}'}
