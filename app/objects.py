@@ -1,4 +1,4 @@
-from config import config_obj
+from app.config import config_obj
 
 
 class DatabaseConsts(object):
