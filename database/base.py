@@ -50,12 +50,6 @@ class AsyncDatabaseSession(object):
             pool_recycle=DatabaseConsts.SA_POOL_RECYCLE,
             pool_timeout=DatabaseConsts.SA_POOL_TIMEOUT,
             max_overflow=DatabaseConsts.SA_POOL_MAX_OVERFLOW,
-            connect_args={
-                'server_settings': {
-                    'application_name': self.application_name,
-                    'options': '-c statement_timeout={}'.format(DatabaseConsts.MYSQL_TIMEOUT_MS)
-                },
-            }
         )
 
         self._session = sessionmaker(bind=self._engine, expire_on_commit=False, class_=AsyncSession)
