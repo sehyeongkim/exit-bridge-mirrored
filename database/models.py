@@ -1,4 +1,3 @@
-# coding: utf-8
 from sqlalchemy import Column, Date, DateTime, Float, Integer, JSON, String, Text
 from sqlalchemy.dialects.mysql import TINYINT
 from sqlalchemy.ext.declarative import declarative_base
@@ -13,7 +12,7 @@ class Company(Base):
     id = Column(Integer, primary_key=True)
     gp_id = Column(Integer, nullable=False)
     name = Column(String(20))
-    logo_img_url = Column(String(255))
+    logo_img_url = Column(Text)
     product_name = Column(String(20))
     investment_stage = Column(String(20))
     investment_method = Column(String(20))
@@ -22,7 +21,7 @@ class Company(Base):
     company_classification = Column(String(20))
     corporate_classification = Column(String(20))
     establishment_date = Column(Date)
-    homepage_url = Column(String(255))
+    homepage_url = Column(Text)
     business_category = Column(String(20))
     skill = Column(String(30))
     recruitment_start_date = Column(DateTime)
@@ -31,7 +30,7 @@ class Company(Base):
     business_number = Column(String(30))
     venture_registration_number = Column(String(30))
     bond_issue_date = Column(Date)
-    main_banner_img_url = Column(String(255))
+    main_banner_img_url = Column(Text)
 
 
 class CompaniesLimitedPartner(Base):
@@ -91,7 +90,7 @@ class LimitedPartner(Base):
     zip_code = Column(String(10))
     road_name_address = Column(String(40))
     detailed_address = Column(String(40))
-    signature_img_url = Column(String(255))
+    signature_img_url = Column(Text)
     decision_date = Column(DateTime)
     number_of_shares = Column(Integer)
     personal_info_checkbox_json = Column(JSON)
@@ -114,7 +113,7 @@ class LpApplicationForm(Base):
     zip_code = Column(String(10))
     road_name_address = Column(String(40))
     detailed_address = Column(String(40))
-    signature_img_url = Column(String(255))
+    signature_img_url = Column(Text)
     decision_date = Column(DateTime)
     number_of_shares = Column(Integer)
     created_at = Column(DateTime)
@@ -191,7 +190,7 @@ class User(Base):
     type = Column(String(10))
     access_token = Column(String(255))
     refresh_token = Column(String(255))
-    profile_img_url = Column(String(255))
+    profile_img_url = Column(Text)
     is_verified = Column(Integer)
     zip_code = Column(String(10))
     road_name_address = Column(String(40))
