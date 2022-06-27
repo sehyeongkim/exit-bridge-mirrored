@@ -2,25 +2,26 @@ import sys
 import os
 import loguru
 
+from core.config import config
 
 debugger = loguru.logger
 
 
-def init_logger(config_obj, log_filename):
+def init_logger():
     log_format = '[{time:YYYY-MM-DD HH:mm:ss.SSS}] [{process: >5}] [{level.name:>5}] <level>{message}</level>'
     loguru.logger.configure(
         handlers=[
             dict(sink=sys.stdout,
                  format=log_format,
-                 level=config_obj['log']['level'].upper(),
+                 level=config.LOG_LEVEL.upper(),
                  colorize=True),
-            dict(sink=os.path.join(config_obj['log']['directory'], log_filename),
+            dict(sink=os.path.join(config.LOG_DIR, config.LOG_FILENAME),
                  format=log_format,
                  enqueue=True,
-                 level=config_obj['log']['level'].upper(),
+                 level=config.LOG_LEVEL.upper(),
                  # serialize=True,
-                 rotation='%s MB' % config_obj['log']['max_mbytes'],
-                 retention=int(config_obj['log']['backup_count']),
+                 rotation='%s MB' % config.LOG_MBYTES,
+                 retention=config.LOG_BACKUP_COUNT,
                  )
         ],
     )
