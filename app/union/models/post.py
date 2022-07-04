@@ -33,7 +33,6 @@ class MainPost(Base, TimestampMixin):
     gp_id = Column(Integer, nullable=False)
     intro = Column(Text)
     title = Column(String(40))
-    is_activated = Column(Boolean, default=False)
     deleted_at = Column(DateTime)
     main_post_detail_id = Column(Integer)
 

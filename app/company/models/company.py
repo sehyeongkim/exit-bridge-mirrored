@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Date, DateTime, Float, Integer, String
+from sqlalchemy import Column, Date, DateTime, Float, Integer, String, Text
 from sqlalchemy.ext.declarative import declarative_base
 
 
@@ -11,7 +11,7 @@ class Company(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     gp_id = Column(Integer, nullable=False)
     name = Column(String(20))
-    logo_img_url = Column(String(255))
+    logo_img_url = Column(Text)
     product_name = Column(String(20))
     investment_stage = Column(String(20))
     investment_method = Column(String(20))
@@ -20,7 +20,7 @@ class Company(Base):
     company_classification = Column(String(20))
     corporate_classification = Column(String(20))
     establishment_date = Column(Date)
-    homepage_url = Column(String(255))
+    homepage_url = Column(Text)
     business_category = Column(String(20))
     skill = Column(String(30))
     recruitment_start_date = Column(DateTime)
@@ -29,7 +29,7 @@ class Company(Base):
     business_number = Column(String(30))
     venture_registration_number = Column(String(30))
     bond_issue_date = Column(Date)
-    main_banner_img_url = Column(String(255))
+    main_banner_img_url = Column(Text)
 
 
 class CompaniesLimitedPartner(Base):
