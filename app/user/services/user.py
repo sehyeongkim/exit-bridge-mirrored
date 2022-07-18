@@ -1,13 +1,11 @@
+import uuid
+
 from typing import Optional, List, Union, NoReturn
 
 from sqlalchemy import or_, select
 
 from app.user.models import User
 from core.db import Transactional, Propagation, session
-from core.exceptions import (
-    PasswordDoesNotMatchException,
-    DuplicateEmailOrNicknameException,
-)
 
 
 class UserService:
@@ -27,28 +25,42 @@ class UserService:
         result = await session.execute(query)
         return result.scalars().all()
 
-    @Transactional(propagation=Propagation.REQUIRED)
-    async def create_user(self, email: str, password1: str, password2: str, nickname: str) -> None:
-        if password1 != password2:
-            raise PasswordDoesNotMatchException
-
+    async def get_user_by_kakao_user_id(self, kakao_user_id: str) -> Union[User, None]:
         result = await session.execute(
-            select(User).where(or_(User.email == email, User.nickname == nickname))
+            select(User).where(User.kakao_user_id == kakao_user_id)
         )
-        is_exist = result.scalars().first()
-        if is_exist:
-            raise DuplicateEmailOrNicknameException
+        user = result.scalars().first()
+        return user if user else None
 
-        user = User(email=email, password=password1, nickname=nickname)
+    @Transactional(propagation=Propagation.REQUIRED)
+    async def create_user(self, kakao_user_id: str, name: str, phone_number: str) -> User:
+        random_id = str(uuid.uuid4()).split('-')
+        user_id = random_id[0] + random_id[-1]
+        user = User(
+            id=user_id,
+            kakao_user_id=kakao_user_id,
+            name=name,
+            phone_number=phone_number
+        )
         session.add(user)
+        return user
 
-    async def is_admin(self, user_id: int) -> bool:
+    async def is_admin(self, user_id: str) -> bool:
         result = await session.execute(select(User).where(User.id == user_id))
         user = result.scalars().first()
         if not user:
             return False
 
-        if user.is_admin is False:
+        if user.type.lower() == 'admin':
+            return True
+        return False
+
+    async def is_gp(self, user_id: str) -> bool:
+        result = await session.execute(select(User).where(User.id == user_id))
+        user = result.scalars().first()
+        if not user:
             return False
 
-        return True
+        if user.type.lower() == 'gp':
+            return True
+        return False

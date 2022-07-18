@@ -1,6 +1,6 @@
-from typing import Optional, Tuple
-
 import jwt
+
+from typing import Optional, Tuple
 from starlette.authentication import AuthenticationBackend
 from starlette.middleware.authentication import (
     AuthenticationMiddleware as BaseAuthenticationMiddleware,

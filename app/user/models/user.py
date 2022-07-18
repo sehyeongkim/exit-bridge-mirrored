@@ -8,9 +8,10 @@ class User(Base, TimestampMixin):
     __tablename__ = 'users'
 
     id = Column(String(20), primary_key=True)  # uuid first + last part -> length 20
-    kakao_user_id = Column(String(50), unique=True)  # index
+    kakao_user_id = Column(String(50), unique=True, nullable=False)  # index
+    name = Column(String(20), nullable=False)
+    phone_number = Column(String(20), nullable=False)
     email = Column(String(40))
-    phone_number = Column(String(20))
     type = Column(String(10))
     access_token = Column(String(255))
     refresh_token = Column(String(255))

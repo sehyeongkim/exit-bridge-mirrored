@@ -24,6 +24,8 @@ class BaseConfig(BaseSettings):
     SA_POOL_TIMEOUT: int
     SA_MAX_OVERFLOW: int
 
+    KAKAO_USERINFO_REQUEST_URL = 'https://kapi.kakao.com/v2/user/me'
+
     class Config:
         case_sensitive = False
         env_file = 'dev.env'
