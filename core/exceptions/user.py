@@ -23,3 +23,15 @@ class KakaoUserIdNotRegisteredException(CustomException):
     code = 400
     error_code = "USER__KAKAO_USER_ID_NOT_REGISTERED"
     message = "kakao user id is not registered"
+
+
+class GPNotFoundException(CustomException):
+    code = 400
+    error_code = "GP__NOT_FOUND"
+    message = "gp was not found"
+
+
+class AuthorizationMismatchedException(CustomException):
+    code = 401
+    error_code = 'USER__AUTHORIZATION_MISMATCHED'
+    message = 'authorization is mismatched'

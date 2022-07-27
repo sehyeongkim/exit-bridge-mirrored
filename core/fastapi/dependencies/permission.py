@@ -32,7 +32,18 @@ class IsAdmin(BasePermission):
         if not user_id:
             return False
 
-        return await UserService().is_admin(user_id=user_id)
+        return await UserService().is_admin(user_id)
+
+
+class IsGP(BasePermission):
+    exception = UnauthorizedException
+
+    async def has_permission(self, request: Request) -> bool:
+        user_id = request.user.id
+        if not user_id:
+            return False
+
+        return await UserService().is_gp(user_id)
 
 
 class AllowAll(BasePermission):

@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Request, Depends
+from fastapi.middleware import Middleware
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
@@ -13,16 +14,7 @@ from core.fastapi.middlewares import (
     SQLAlchemyMiddleware,
 )
 from core.utils.logger import debugger, init_logger
-
-
-def init_cors(app: FastAPI) -> None:
-    app.add_middleware(
-        CORSMiddleware,
-        allow_origins=["*"],
-        allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
-    )
+from typing import List
 
 
 def init_routers(app: FastAPI) -> None:
@@ -53,13 +45,23 @@ def on_auth_error(request: Request, exc: Exception):
     )
 
 
-def init_middleware(app: FastAPI) -> None:
-    app.add_middleware(
-        AuthenticationMiddleware,
-        backend=AuthBackend(),
-        on_error=on_auth_error,
-    )
-    app.add_middleware(SQLAlchemyMiddleware)
+def make_middleware() -> List[Middleware]:
+    middleware = [
+        Middleware(
+            CORSMiddleware,
+            allow_origins=["*"],
+            allow_credentials=True,
+            allow_methods=["*"],
+            allow_headers=["*"],
+        ),
+        Middleware(
+            AuthenticationMiddleware,
+            backend=AuthBackend(),
+            on_error=on_auth_error,
+        ),
+        Middleware(SQLAlchemyMiddleware)
+    ]
+    return middleware
 
 
 def create_app() -> FastAPI:
@@ -70,11 +72,10 @@ def create_app() -> FastAPI:
         docs_url=None if config.ENV == "prod" else "/docs",
         redoc_url=None if config.ENV == "prod" else "/redoc",
         dependencies=[Depends(Logging)],
+        middleware=make_middleware()
     )
     init_routers(app=app)
-    init_cors(app=app)
     init_listeners(app=app)
-    init_middleware(app=app)
     return app
 
 

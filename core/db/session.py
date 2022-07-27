@@ -1,3 +1,5 @@
+import logging
+
 from contextvars import ContextVar, Token
 from typing import Union
 
@@ -11,6 +13,12 @@ from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy.sql.expression import Update, Delete, Insert
 
 from core.config import config
+
+
+logging.basicConfig()
+logging.getLogger("sqlalchemy.engine").setLevel(logging.DEBUG)
+logging.getLogger("sqlalchemy.pool").setLevel(logging.DEBUG)
+
 
 session_context: ContextVar[str] = ContextVar("session_context")
 

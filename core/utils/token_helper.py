@@ -17,7 +17,7 @@ class TokenHelper:
             },
             key=config.JWT_SECRET_KEY,
             algorithm=config.JWT_ALGORITHM,
-        ).decode("utf8")
+        )
         return token
 
     @staticmethod

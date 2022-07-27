@@ -9,14 +9,14 @@ class Union(Base, TimestampMixin):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     gp_id = Column(Integer, nullable=False)
-    company_id = Column(Integer, nullable=False)
-    name = Column(String(20))
+    company_id = Column(Integer)
+    name = Column(String(20), unique=True)
     unit_share_price = Column(Float)
     total_share_number = Column(Float)
     total_share_price = Column(Float)
     establishment_date = Column(DateTime)
     expire_date = Column(DateTime)
-    confirmation_status = Column(String(10))
+    status = Column(String(10))
 
 
 class UnionsLimitedPartner(Base):

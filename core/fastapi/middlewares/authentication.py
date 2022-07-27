@@ -39,7 +39,6 @@ class AuthBackend(AuthenticationBackend):
             user_id = payload.get("user_id")
         except jwt.exceptions.PyJWTError:
             return False, current_user
-
         current_user.id = user_id
         return True, current_user
 
