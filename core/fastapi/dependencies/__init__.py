@@ -3,7 +3,11 @@ from .permission import (
     PermissionDependency,
     IsAuthenticated,
     IsAdmin,
-    AllowAll,
+    IsGP,
+    AllowAll
+)
+from .identification import (
+    get_gp_id
 )
 
 __all__ = [
@@ -12,4 +16,6 @@ __all__ = [
     "IsAuthenticated",
     "IsAdmin",
     "AllowAll",
+    "IsGP",
+    "get_gp_id"
 ]

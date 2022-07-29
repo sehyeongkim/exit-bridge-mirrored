@@ -35,6 +35,10 @@ class MainPost(Base, TimestampMixin):
     title = Column(String(40))
     deleted_at = Column(DateTime)
     main_post_detail_id = Column(Integer)
+    recruitment_start_date = Column(DateTime)
+    recruitment_end_date = Column(DateTime)
+    recruitment_status = Column(String(10), nullable=False)
+    is_open_to_public = Column(Boolean, nullable=False)
 
 
 class MainPostDetail(Base):

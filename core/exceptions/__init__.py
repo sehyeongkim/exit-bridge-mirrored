@@ -9,8 +9,10 @@ from .base import (
 )
 from .token import DecodeTokenException, ExpiredTokenException
 from .user import (
-    PasswordDoesNotMatchException,
-    DuplicateEmailOrNicknameException,
+    KakaoUserIdNotRegisteredException,
+    KakaoServerTemporaryErrorException,
+    KakaoAccessTokenNotExistException,
+    KakaoIpMismatchedException
 )
 
 
@@ -24,6 +26,8 @@ __all__ = [
     "UnauthorizedException",
     "DecodeTokenException",
     "ExpiredTokenException",
-    "PasswordDoesNotMatchException",
-    "DuplicateEmailOrNicknameException",
+    "KakaoUserIdNotRegisteredException",
+    "KakaoAccessTokenNotExistException",
+    "KakaoIpMismatchedException",
+    "KakaoServerTemporaryErrorException"
 ]

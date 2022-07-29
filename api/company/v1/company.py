@@ -1,0 +1,30 @@
+import datetime as dt
+
+from fastapi import APIRouter, Depends, Request
+
+from app.company.schemas import *
+from app.company.schemas.company import CompanyRegistrationRequestSchema
+from app.company.services import CompanyService
+from app.user.services import GPService
+
+from core.fastapi.dependencies import PermissionDependency, IsGP, get_gp_id
+from core.exceptions.user import AuthorizationMismatchedException
+from core.utils.logger import debugger
+
+company_router = APIRouter()
+
+
+@company_router.post(
+    '',
+    responses={"400": {"model": ExceptionResponseSchema}},
+    dependencies=[Depends(PermissionDependency([IsGP]))]
+)
+async def register_company(company_request: CompanyRegistrationRequestSchema, gp_id: int = Depends(get_gp_id)):
+    if company_request.recruitment_status == RecruitmentStatus.OPEN.value:
+        CompanyRegistrationRequestSchema.recruitment_start_date = dt.datetime.now().date()
+
+    await CompanyService().create_company(
+        gp_id,
+        **company_request.dict(),
+    )
+    return {'result': 'SUCCESS'}

@@ -1,4 +1,4 @@
-from .user import *
+from .company import *
 
 
 class ExceptionResponseSchema(BaseModel):
