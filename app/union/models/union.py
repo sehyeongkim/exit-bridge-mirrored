@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Integer, Float, DateTime, Enum
+from sqlalchemy import Column, String, Integer, Float, DateTime
 
 from app.union.schemas import UnionStatus
 from core.db import Base
@@ -17,7 +17,7 @@ class Union(Base, TimestampMixin):
     total_share_price = Column(Float)
     establishment_date = Column(DateTime)
     expire_date = Column(DateTime)
-    status = Column(Enum(UnionStatus))
+    status = Column(String(10))
 
 
 class UnionsLimitedPartner(Base):
