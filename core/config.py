@@ -24,6 +24,10 @@ class BaseConfig(BaseSettings):
     SA_POOL_TIMEOUT: int
     SA_MAX_OVERFLOW: int
 
+    AWS_ACCESS_KEY_ID: str
+    AWS_SECRET_ACCESS_KEY: str
+    AWS_S3_BUCKET_NAME: str
+
     KAKAO_USERINFO_REQUEST_URL = 'https://kapi.kakao.com/v2/user/me'
 
     class Config:

@@ -1,6 +1,7 @@
 import datetime as dt
 
 from enum import Enum
+from fastapi import Form, UploadFile, File
 from pydantic import BaseModel, Field
 from typing import Optional, List
 
@@ -78,6 +79,14 @@ class LPApplicationManagementRequestSchema(BaseModel):
     union_id: int = Field(..., description='Union ID')
     is_approved: bool = Field(..., description='승인여부: 승인|미승인')
     reject_reason: Optional[str] = Field(description='반려사유')
+
+    class Config:
+        orm_mode = True
+
+
+class S3UploadRequestSchema(BaseModel):
+    file_path: str = Form(..., description="s3 bucket file path")
+    file: UploadFile = File(..., description="file")
 
     class Config:
         orm_mode = True
