@@ -1,6 +1,6 @@
 import datetime as dt
 
-from typing import Optional
+from typing import Optional, List
 from enum import Enum
 from pydantic import BaseModel, Field
 
@@ -23,3 +23,35 @@ class UnionRegistrationRequestSchema(BaseModel):
     class Config:
         orm_mode = True
         use_enum_values = True
+
+
+class UnionHistoricalStatus(BaseModel):
+    before_operation: int
+    in_operation: int
+    dismissal: int
+
+
+class Union(BaseModel):
+    union_id: int
+    gp_id: int
+    company_id: int
+    company_name: str
+    union_name: str
+    establishment_date: str
+    expire_date: str
+    confirmation_status: str
+    total_lp_number: int
+    total_share_price: int
+
+
+class UnionSummary(BaseModel):
+    AUM: int
+    total_company_number: int
+    total_union_number: int
+    total_lp_number: int
+
+
+class UnionOverallResponseSchema(BaseModel):
+    union_historial_status: UnionHistoricalStatus
+    unions: List[Union]
+    union_summary: UnionSummary

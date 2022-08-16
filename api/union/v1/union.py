@@ -1,4 +1,6 @@
 from fastapi import APIRouter, Depends, Request
+from fastapi.responses import JSONResponse
+from fastapi.encoders import jsonable_encoder
 
 from app.union.schemas import *
 from app.union.services import UnionService
@@ -24,4 +26,26 @@ async def register_union(union_request: UnionRegistrationRequestSchema, gp_id: i
         gp_id,
         **union_request.dict()
     )
-    return {'result': 'SUCCESS'}
+    return JSONResponse(content={'result': 'SUCCESS'}, status_code=200)
+
+
+@union_router.get(
+    "/gp/union/status",
+    responses={
+        "400": {"model": ExceptionResponseSchema},
+        "200": {"model": UnionOverallResponseSchema}
+    },
+    dependencies=[Depends(PermissionDependency([IsGP]))]
+)
+async def get_overall_union_status(gp_id: int = Depends(get_gp_id)):
+    unions = await UnionService().get_unions(gp_id)
+    union_historical_status = await UnionService().get_union_historical_status(gp_id)
+    union_summary = await UnionService().get_union_summary(gp_id)
+    result = {
+        'result': {
+            'unions': unions,
+            'union_historical_status': union_historical_status,
+            'union_summary': union_summary
+        }
+    }
+    return JSONResponse(content=jsonable_encoder(result), status_code=200)

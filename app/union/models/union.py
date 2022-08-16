@@ -1,5 +1,6 @@
 from sqlalchemy import Column, String, Integer, Float, DateTime
 
+from app.union.schemas import UnionStatus
 from core.db import Base
 from core.db.mixins import TimestampMixin
 
