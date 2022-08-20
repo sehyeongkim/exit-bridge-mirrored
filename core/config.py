@@ -26,7 +26,10 @@ class BaseConfig(BaseSettings):
 
     AWS_ACCESS_KEY_ID: str
     AWS_SECRET_ACCESS_KEY: str
-    AWS_S3_BUCKET_NAME: str
+    AWS_S3_SENSITIVE_BUCKET_NAME: str
+    AWS_S3_SENSITIVE_FILE_UPLOAD_EXPIRE_SECONDS: int
+    AWS_S3_PUBLIC_BUCKET_NAME: str
+    AWS_S3_REGION_NAME: str
 
     KAKAO_USERINFO_REQUEST_URL = 'https://kapi.kakao.com/v2/user/me'
 
