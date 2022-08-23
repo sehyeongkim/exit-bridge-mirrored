@@ -1,3 +1,4 @@
+--  companies
 CREATE TABLE `companies` (
 	`id`	int	NOT NULL AUTO_INCREMENT,
 	`gp_id`	int	NOT NULL,
@@ -20,6 +21,12 @@ CREATE TABLE `companies` (
 	`main_banner_img_url`	text	NULL
 );
 
+ALTER TABLE `companies` ADD CONSTRAINT `PK_COMPANIES` PRIMARY KEY (
+	`id`
+);
+
+
+-- users
 CREATE TABLE `users` (
 	`id`	varchar(20)	NOT NULL,
 	`email`	varchar(40)	NULL,
@@ -39,6 +46,11 @@ CREATE TABLE `users` (
 	`registration_number`	varchar(100)	NULL
 );
 
+CREATE UNIQUE INDEX UNIQUE_ID_USER
+On users (id);
+
+
+-- main_posts
 CREATE TABLE `main_posts` (
 	`id`	int	NOT NULL AUTO_INCREMENT,
 	`company_id`	int	NOT NULL,
@@ -56,6 +68,12 @@ CREATE TABLE `main_posts` (
 	`Field`	VARCHAR(255)	NULL
 );
 
+ALTER TABLE `main_posts` ADD CONSTRAINT `PK_MAIN_POSTS` PRIMARY KEY (
+	`id`
+);
+
+
+-- main_post_qna
 CREATE TABLE `main_post_qna` (
 	`id`	int	NOT NULL AUTO_INCREMENT,
 	`main_post_id`	int	NOT NULL,
@@ -68,6 +86,12 @@ CREATE TABLE `main_post_qna` (
 	`answer`	text	NULL
 );
 
+ALTER TABLE `main_post_qna` ADD CONSTRAINT `PK_MAIN_POST_QNA` PRIMARY KEY (
+	`id`
+);
+
+
+-- lp_application_forms
 CREATE TABLE `lp_application_forms` (
 	`id`	int	NOT NULL AUTO_INCREMENT,
 	`user_id`	varchar(20)	NOT NULL,
@@ -86,6 +110,12 @@ CREATE TABLE `lp_application_forms` (
 	`reject_reason`	text	NULL
 );
 
+ALTER TABLE `lp_application_forms` ADD CONSTRAINT `PK_LP_APPLICATION_FORMS` PRIMARY KEY (
+	`id`
+);
+
+
+-- unions
 CREATE TABLE `unions` (
 	`id`	int	NOT NULL AUTO_INCREMENT,
 	`gp_id`	int	NOT NULL,
@@ -101,18 +131,38 @@ CREATE TABLE `unions` (
 	`updated_at`	datetime	NULL
 );
 
+ALTER TABLE `unions` ADD CONSTRAINT `PK_UNIONS` PRIMARY KEY (
+	`id`
+);
+
+
+-- unions_limited_partners
 CREATE TABLE `unions_limited_partners` (
 	`id`	int	NOT NULL AUTO_INCREMENT,
 	`lp_id`	int	NOT NULL,
 	`union_id`	int	NOT NULL
 );
 
+
+-- unions_limited_partners
+ALTER TABLE `unions_limited_partners` ADD CONSTRAINT `PK_UNIONS_LIMITED_PARTNERS` PRIMARY KEY (
+	`id`
+);
+
+
+-- companies_limited_partners
 CREATE TABLE `companies_limited_partners` (
 	`id`	int	NOT NULL AUTO_INCREMENT,
 	`company_id`	int	NOT NULL,
 	`lp_id`	int	NOT NULL
 );
 
+ALTER TABLE `companies_limited_partners` ADD CONSTRAINT `PK_COMPANIES_LIMITED_PARTNERS` PRIMARY KEY (
+	`id`
+);
+
+
+-- feeds
 CREATE TABLE `feeds` (
 	`id`	int	NOT NULL AUTO_INCREMENT,
 	`gp_id`	int	NOT NULL,
@@ -124,6 +174,12 @@ CREATE TABLE `feeds` (
 	`deleted_at`	datetime	NULL
 );
 
+ALTER TABLE `feeds` ADD CONSTRAINT `PK_FEEDS` PRIMARY KEY (
+	`id`
+);
+
+
+-- feed_comments
 CREATE TABLE `feed_comments` (
 	`id`	int	NOT NULL AUTO_INCREMENT,
 	`user_id`	varchar(20)	NOT NULL,
@@ -136,6 +192,12 @@ CREATE TABLE `feed_comments` (
 	`mentioned_at`	datetime	NULL
 );
 
+ALTER TABLE `feed_comments` ADD CONSTRAINT `PK_FEED_COMMENTS` PRIMARY KEY (
+	`id`
+);
+
+
+-- general_partners
 CREATE TABLE `general_partners` (
 	`id`	int	NOT NULL AUTO_INCREMENT,
 	`user_id`	varchar(20)	NOT NULL,
@@ -148,6 +210,12 @@ CREATE TABLE `general_partners` (
 	`year_of_gp_experience`	int	NULL
 );
 
+ALTER TABLE `general_partners` ADD CONSTRAINT `PK_GENERAL_PARTNERS` PRIMARY KEY (
+	`id`
+);
+
+
+-- limited_partners
 CREATE TABLE `limited_partners` (
 	`id`	int	NOT NULL AUTO_INCREMENT,
 	`user_id`	varchar(20)	NOT NULL,
@@ -163,6 +231,12 @@ CREATE TABLE `limited_partners` (
 	`updated_at`	datetime	NULL
 );
 
+ALTER TABLE `limited_partners` ADD CONSTRAINT `PK_LIMITED_PARTNERS` PRIMARY KEY (
+	`id`
+);
+
+
+-- clicks
 CREATE TABLE `clicks` (
 	`id`	int	NOT NULL AUTO_INCREMENT,
 	`click_count`	int	NULL,
@@ -172,6 +246,12 @@ CREATE TABLE `clicks` (
 	`updated_at`	datetime	NULL
 );
 
+ALTER TABLE `clicks` ADD CONSTRAINT `PK_CLICKS` PRIMARY KEY (
+	`id`
+);
+
+
+-- main_post_details
 CREATE TABLE `main_post_details` (
 	`id`	int	NOT NULL AUTO_INCREMENT,
 	`html_text`	text	NULL,
@@ -181,6 +261,12 @@ CREATE TABLE `main_post_details` (
 	`article_json`	json	NULL
 );
 
+ALTER TABLE `main_post_details` ADD CONSTRAINT `PK_MAIN_POST_DETAILS` PRIMARY KEY (
+	`id`
+);
+
+
+-- user_types
 CREATE TABLE `user_types` (
 	`id`	int	NOT NULL AUTO_INCREMENT,
 	`user_id`	varchar(20)	NOT NULL,
@@ -188,6 +274,12 @@ CREATE TABLE `user_types` (
 	`union_id`	int	NULL
 );
 
+ALTER TABLE `user_types` ADD CONSTRAINT `PK_USER_TYPES` PRIMARY KEY (
+	`id`
+);
+
+
+-- limited_partner_details
 CREATE TABLE `limited_partner_details` (
 	`id`	int	NOT NULL AUTO_INCREMENT,
 	`lp_id`	int	NOT NULL,
@@ -199,6 +291,12 @@ CREATE TABLE `limited_partner_details` (
 	`updated_at`	datetime	NULL
 );
 
+ALTER TABLE `limited_partner_details` ADD CONSTRAINT `PK_LIMITED_PARTNER_DETAILS` PRIMARY KEY (
+	`id`
+);
+
+
+-- general_partner_careers
 CREATE TABLE `general_partner_careers` (
 	`id`	int	NOT NULL AUTO_INCREMENT,
 	`gp_id`	int	NOT NULL,
@@ -208,6 +306,12 @@ CREATE TABLE `general_partner_careers` (
 	`career_end_date`	date	NULL
 );
 
+ALTER TABLE `general_partner_careers` ADD CONSTRAINT `PK_GENERAL_PARTNER_CAREERS` PRIMARY KEY (
+	`id`
+);
+
+
+-- general_partner_union_establishment_experiences
 CREATE TABLE `general_partner_union_establishment_experiences` (
 	`id`	int	NOT NULL AUTO_INCREMENT,
 	`gp_id`	int	NOT NULL,
@@ -217,82 +321,24 @@ CREATE TABLE `general_partner_union_establishment_experiences` (
 	`union_investment_certificate_url`	text	NULL
 );
 
-CREATE TABLE `s3_bucket` (
-	`id`	varchar(100)	NOT NULL,
-	`key_prefix`	varchar(255)	NULL,
-	`object_key_name`	varchar(255)	NULL,
-	`bucket_name`	varchar(255)	NULL
-);
-
-ALTER TABLE `companies` ADD CONSTRAINT `PK_COMPANIES` PRIMARY KEY (
-	`id`
-);
-
-ALTER TABLE `main_posts` ADD CONSTRAINT `PK_MAIN_POSTS` PRIMARY KEY (
-	`id`
-);
-
-ALTER TABLE `main_post_qna` ADD CONSTRAINT `PK_MAIN_POST_QNA` PRIMARY KEY (
-	`id`
-);
-
-ALTER TABLE `lp_application_forms` ADD CONSTRAINT `PK_LP_APPLICATION_FORMS` PRIMARY KEY (
-	`id`
-);
-
-ALTER TABLE `unions` ADD CONSTRAINT `PK_UNIONS` PRIMARY KEY (
-	`id`
-);
-
-ALTER TABLE `unions_limited_partners` ADD CONSTRAINT `PK_UNIONS_LIMITED_PARTNERS` PRIMARY KEY (
-	`id`
-);
-
-ALTER TABLE `companies_limited_partners` ADD CONSTRAINT `PK_COMPANIES_LIMITED_PARTNERS` PRIMARY KEY (
-	`id`
-);
-
-ALTER TABLE `feeds` ADD CONSTRAINT `PK_FEEDS` PRIMARY KEY (
-	`id`
-);
-
-ALTER TABLE `feed_comments` ADD CONSTRAINT `PK_FEED_COMMENTS` PRIMARY KEY (
-	`id`
-);
-
-ALTER TABLE `general_partners` ADD CONSTRAINT `PK_GENERAL_PARTNERS` PRIMARY KEY (
-	`id`
-);
-
-ALTER TABLE `limited_partners` ADD CONSTRAINT `PK_LIMITED_PARTNERS` PRIMARY KEY (
-	`id`
-);
-
-ALTER TABLE `clicks` ADD CONSTRAINT `PK_CLICKS` PRIMARY KEY (
-	`id`
-);
-
-ALTER TABLE `main_post_details` ADD CONSTRAINT `PK_MAIN_POST_DETAILS` PRIMARY KEY (
-	`id`
-);
-
-ALTER TABLE `user_types` ADD CONSTRAINT `PK_USER_TYPES` PRIMARY KEY (
-	`id`
-);
-
-ALTER TABLE `limited_partner_details` ADD CONSTRAINT `PK_LIMITED_PARTNER_DETAILS` PRIMARY KEY (
-	`id`
-);
-
-ALTER TABLE `general_partner_careers` ADD CONSTRAINT `PK_GENERAL_PARTNER_CAREERS` PRIMARY KEY (
-	`id`
-);
-
 ALTER TABLE `general_partner_union_establishment_experiences` ADD CONSTRAINT `PK_GENERAL_PARTNER_UNION_ESTABLISHMENT_EXPERIENCES` PRIMARY KEY (
 	`id`
 );
 
-ALTER TABLE `s3_bucket` ADD CONSTRAINT `PK_S3_BUCKET` PRIMARY KEY (
-	`id`
+
+-- s3_buckets
+CREATE TABLE `s3_buckets` (
+	`id`	varchar(100)	NOT NULL,
+	`key_prefix`	varchar(255)	NULL,
+	`filename`	varchar(255)	NULL,
+	`bucket_name`	varchar(255)	NULL,
+    `created_at`	datetime	NULL,
+	`updated_at`	datetime	NULL
 );
 
+ALTER TABLE `s3_buckets` ADD CONSTRAINT `MULTI_PK_S3_BUCKETS` PRIMARY KEY (
+	`filename`, `key_prefix`, `bucket_name`
+);
+
+CREATE UNIQUE INDEX UNIQUE_ID_S3_BUCKET
+On s3_buckets (id);
