@@ -15,6 +15,7 @@ from core.exceptions.user import *
 from core.utils.logger import debugger
 from core.utils.token_helper import TokenHelper
 
+
 user_router = APIRouter()
 
 
@@ -123,14 +124,3 @@ async def approve_gp(request: Request, gp_id):
         confirmation_date
     )
     return {'result': 'SUCCESS'}
-
-
-@user_router.post(
-    '/s3',
-    responses={"400": {"model": ExceptionResponseSchema}},
-    dependencies=[Depends(PermissionDependency([IsAuthenticated]))]
-)
-async def upload_to_s3(file_path: str = Form(..., description="s3 bucket file path"), file: UploadFile = File(..., description="file")):
-    from core.utils.s3_uploader import S3UpDownLoader
-    result = await S3UpDownLoader().upload_file(file_path, file)
-    return result

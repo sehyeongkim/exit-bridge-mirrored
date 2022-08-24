@@ -82,11 +82,3 @@ class LPApplicationManagementRequestSchema(BaseModel):
 
     class Config:
         orm_mode = True
-
-
-class S3UploadRequestSchema(BaseModel):
-    file_path: str = Form(..., description="s3 bucket file path")
-    file: UploadFile = File(..., description="file")
-
-    class Config:
-        orm_mode = True
