@@ -52,3 +52,16 @@ class CompanyRegistrationRequestSchema(BaseModel):
     class Config:
         orm_mode = True
         use_enum_values = True
+
+
+class CompanyPost(BaseModel):
+    company_id: int
+    company_name: str
+    main_post_id: int
+    logo_img_url: str
+    intro: str
+
+
+class CompanyPostResponseSchema(BaseModel):
+    open: List[CompanyPost]
+    closed: List[CompanyPost]

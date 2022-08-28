@@ -1,6 +1,8 @@
 import datetime as dt
 
 from fastapi import APIRouter, Depends, Request
+from fastapi.responses import JSONResponse
+from fastapi.encoders import jsonable_encoder
 
 from app.company.schemas import *
 from app.company.schemas.company import CompanyRegistrationRequestSchema
@@ -28,3 +30,27 @@ async def register_company(company_request: CompanyRegistrationRequestSchema, gp
         **company_request.dict(),
     )
     return {'result': 'SUCCESS'}
+
+
+@company_router.get(
+    '/search',
+    responses={'400': {'model': ExceptionResponseSchema},
+               '200': {'model': CompanyPostResponseSchema}}
+)
+async def get_companies_post(q: Optional[str] = None):
+    posts = await CompanyService().get_post_of_companies(q)
+    opened, closed = [], []
+    for post in posts:
+        if post['is_open_to_public']:
+            opened.append(post)
+        else:
+            closed.append(post)
+        del post['is_open_to_public']
+
+    result = {
+        'result': {
+            'open': opened,
+            'closed': closed
+        }
+    }
+    return JSONResponse(content=jsonable_encoder(result), status_code=200)

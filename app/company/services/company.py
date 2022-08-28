@@ -5,6 +5,7 @@ from sqlalchemy import or_, select, update, delete
 from app.union.models import *
 from app.company.models import *
 from app.company.schemas import RecruitmentStatus, ArticleJson
+from app.s3.services import S3Service
 from core.db import Transactional, Propagation, session
 
 
@@ -85,3 +86,22 @@ class CompanyService(object):
         )
         session.add(main_post)
 
+    async def get_post_of_companies(self, q: str or None) -> list:
+        stmt = select(
+            Company.id.label('company_id'),
+            Company.name.label('company_name'),
+            MainPost.id.label('main_post_id'),
+            Company.logo_img_url,
+            MainPost.intro,
+            MainPost.is_open_to_public
+        ).join(
+            MainPost, Company.id == MainPost.company_id
+        )
+        if q is not None:
+            stmt = stmt.where(Company.name.like(f'%{q}%'))
+        result = await session.execute(stmt).scalars().all()
+
+        for row in result:
+            logo_img_url = await S3Service().get_s3_url(row['logo_img_url'])
+            row['logo_img_url'] = logo_img_url
+        return result
