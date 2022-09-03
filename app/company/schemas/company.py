@@ -65,3 +65,20 @@ class CompanyPost(BaseModel):
 class CompanyPostResponseSchema(BaseModel):
     open: List[CompanyPost]
     closed: List[CompanyPost]
+
+
+class MainPostResponseSchema(BaseModel):
+    company_id: int
+    company_name: str
+    intro: str
+    title: str
+    is_activated: bool
+    logo_img_url: str
+    updated_at: str
+    recruitement_start_date: str
+    recruitement_end_date: str
+    html_text: str
+    inobiz_url: str
+    dart_url: str
+    attachment_json: dict
+    article_json: dict

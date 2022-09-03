@@ -54,3 +54,16 @@ async def get_companies_post(q: Optional[str] = None):
         }
     }
     return JSONResponse(content=jsonable_encoder(result), status_code=200)
+
+
+@company_router.get(
+    '/post',
+    responses={'400': {'model': ExceptionResponseSchema},
+               '200': {'model': CompanyPostResponseSchema}}
+)
+async def get_main_post(main_post_id: int):
+    main_post = await CompanyService().get_main_post(main_post_id)
+    result = {
+        'result': main_post
+    }
+    return JSONResponse(content=jsonable_encoder(result), status_code=200)
