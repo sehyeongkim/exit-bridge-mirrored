@@ -59,7 +59,7 @@ class UnionService(object):
         return False
 
     async def get_unions(self, gp_id: int) -> list:
-        sub_lps = self.sub_get_lps_by_gp(gp_id)
+        sub_lps = await self.sub_get_lps_by_gp(gp_id)
         stmt = select(
             Union.id,
             Union.gp_id,
@@ -92,7 +92,7 @@ class UnionService(object):
         return result.scalars().first()
 
     async def get_union_summary(self, gp_id: int) -> dict:
-        sub_lps = self.sub_get_lps_by_gp(gp_id)
+        sub_lps = await self.sub_get_lps_by_gp(gp_id)
         stmt = select(
             func.sum(Union.total_share_price).label('AUM'),
             func.count(Union.company_id).label('total_company_number'),
