@@ -46,9 +46,9 @@ CREATE TABLE `users` (
 	`registration_number`	varchar(100)	NULL
 );
 
-CREATE UNIQUE INDEX UNIQUE_ID_USER
-On users (id);
-
+ALTER TABLE `users` ADD CONSTRAINT `PK_USERS` PRIMARY KEY (
+	`id`
+);
 
 -- main_posts
 CREATE TABLE `main_posts` (
@@ -204,7 +204,7 @@ CREATE TABLE `general_partners` (
 	`date_of_birth`	varchar(20)	NULL,
 	`applied_date`	datetime	NULL,
 	`confirmation_date`	datetime	NULL,
-	`crated_at`	datetime	NULL,
+	`created_at`	datetime	NULL,
 	`updated_at`	datetime	NULL,
 	`nickname`	varchar(50)	NULL,
 	`year_of_gp_experience`	int	NULL
