@@ -68,6 +68,17 @@ class UserService(object):
             return True
         return False
 
+    @Transactional()
+    async def delete_user(self, user_id) -> None:
+        await session.execute(delete(User).where(User.id == user_id))
+
+    async def get_user_by_email(self, email) -> User:
+        result = await session.execute(
+            select(User).where(User.email == email)
+        )
+        user = result.scalars().first()
+        return user if user else None
+
 
 class GPService(object):
     def __init__(self):
