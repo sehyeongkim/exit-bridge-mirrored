@@ -79,7 +79,7 @@ async def signup_kakao_user(request: UserLoginRequestSchema):
                 email=request.email
             )
             user_id = await UserService().create_user(**create_user_dict)
-            user = UserService().get_user_by_id(user_id)
+            user = await UserService().get_user_by_id(user_id)
         else:
             raise KakaoUserIdNotRegisteredException
 
