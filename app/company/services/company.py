@@ -101,12 +101,15 @@ class CompanyService(object):
         )
         if q is not None:
             stmt = stmt.where(Company.name.like(f'%{q}%'))
-        result = await session.execute(stmt).scalars().all()
+        result = await session.execute(stmt)
+        rows = result.all()
 
-        for row in result:
-            logo_img_url = await S3Service().get_s3_url(row['logo_img_url'])
-            row['logo_img_url'] = logo_img_url
-        return result
+        for row in rows:
+            if 'http' in row.logo_img_url:
+                continue
+            logo_img_url = await S3Service().get_s3_url(row.logo_img_url)
+            row.logo_img_url = logo_img_url
+        return rows
 
     async def get_main_post(self, main_post_id: int) -> dict:
         stmt = select(
@@ -132,4 +135,22 @@ class CompanyService(object):
             MainPost.id == main_post_id
         )
         result = await session.execute(stmt)
-        return result.scalars().first()
+        rows = result.all()
+
+        for row in rows:
+            if 'http' in row.logo_img_url or not row.logo_img_url:
+                continue
+            if 'http' in row.dart_url or not row.dart_url:
+                continue
+            if 'http' in row.inobiz_url or not row.inobiz_url:
+                continue
+
+            logo_img_url = await S3Service().get_s3_url(row.logo_img_url)
+            row.logo_img_url = logo_img_url
+
+            dart_url = await S3Service().get_s3_url(row.dart_url)
+            row.dart_url = dart_url
+
+            inobiz_url = await S3Service().get_s3_url(row.inobiz_url)
+            row.inobiz_url = inobiz_url
+        return rows

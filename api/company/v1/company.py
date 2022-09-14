@@ -46,7 +46,6 @@ async def get_companies_post(q: Optional[str] = None):
             opened.append(post)
         else:
             closed.append(post)
-        del post['is_open_to_public']
 
     result = {
         'result': {
