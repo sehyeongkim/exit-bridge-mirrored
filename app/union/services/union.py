@@ -103,3 +103,19 @@ class UnionService(object):
         )
         result = await session.execute(stmt)
         return result.scalars().first()
+
+    async def get_unions_detail_information(self, gp_id: int) -> list:
+        stmt = select(
+            Union.id,
+            Union.name.label('union_name'),
+            Union.gp_id,
+            Union.company_id,
+            Union.unit_share_price,
+            Union.total_share_number,
+            Union.total_share_price,
+            Union.establishment_date,
+            Union.expire_date,
+            Union.status.label('confirmation_status')
+        ).where(Union.gp_id == gp_id)
+        result = await session.execute(stmt)
+        return result.scalars().all()
