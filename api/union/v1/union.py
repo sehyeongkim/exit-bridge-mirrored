@@ -9,7 +9,6 @@ from core.fastapi.dependencies import PermissionDependency, IsGP, get_gp_id
 from core.exceptions.union import *
 from core.utils.logger import debugger
 
-
 union_router = APIRouter()
 
 
@@ -55,10 +54,10 @@ async def get_overall_union_status(gp_id: int = Depends(get_gp_id)):
     '/gp/union',
     responses={'400': {'model': ExceptionResponseSchema},
                # '200': {'model': UnionInformationResponseSchema}
-    },
+               },
     dependencies=[Depends(PermissionDependency([IsGP]))]
 )
-async def get_unions_information(gp_id: Depends(get_gp_id)):
+async def get_unions_information(gp_id: int = Depends(get_gp_id)):
     unions = await UnionService().get_unions_detail_information(gp_id)
     result = {
         'result': unions
