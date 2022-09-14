@@ -33,7 +33,7 @@ async def register_union(union_request: UnionRegistrationRequestSchema, gp_id: i
     "/gp/union/status",
     responses={
         "400": {"model": ExceptionResponseSchema},
-        "200": {"model": UnionOverallResponseSchema}
+        # "200": {"model": UnionOverallResponseSchema}
     },
     dependencies=[Depends(PermissionDependency([IsGP]))]
 )
@@ -54,7 +54,7 @@ async def get_overall_union_status(gp_id: int = Depends(get_gp_id)):
 @union_router.get(
     '/gp/union',
     responses={'400': {'model': ExceptionResponseSchema},
-               '200': {'model': UnionInformationResponseSchema}
+               # '200': {'model': UnionInformationResponseSchema}
     },
     dependencies=[Depends(PermissionDependency([IsGP]))]
 )

@@ -35,7 +35,8 @@ async def register_company(company_request: CompanyRegistrationRequestSchema, gp
 @company_router.get(
     '/search',
     responses={'400': {'model': ExceptionResponseSchema},
-               '200': {'model': CompanyPostResponseSchema}}
+               # '200': {'model': CompanyPostResponseSchema}
+               }
 )
 async def get_companies_post(q: Optional[str] = None):
     posts = await CompanyService().get_post_of_companies(q)
@@ -59,7 +60,8 @@ async def get_companies_post(q: Optional[str] = None):
 @company_router.get(
     '/post',
     responses={'400': {'model': ExceptionResponseSchema},
-               '200': {'model': CompanyPostResponseSchema}}
+               # '200': {'model': CompanyPostResponseSchema}
+               }
 )
 async def get_main_post(main_post_id: int):
     main_post = await CompanyService().get_main_post(main_post_id)
