@@ -34,8 +34,15 @@ class UserService(object):
         user = result.scalars().first()
         return user if user else None
 
+    async def get_user_by_id(self, user_id: str) -> typing.Union[User, None]:
+        result = await session.execute(select(User).where(User.id == user_id))
+        user = result.scalars().first()
+        if not user:
+            return None
+        return user
+
     @Transactional(propagation=Propagation.REQUIRED)
-    async def create_user(self, kakao_user_id: str, phone_number: str, email: str) -> User:
+    async def create_user(self, kakao_user_id: str, phone_number: str, email: str) -> str:
         random_id = str(uuid.uuid4()).split('-')
         user_id = random_id[0] + random_id[-1]
         user = User(
@@ -46,7 +53,7 @@ class UserService(object):
         )
         session.add(user)
         await session.flush()
-        return user
+        return user.id
 
     async def is_admin(self, user_id: str) -> bool:
         result = await session.execute(select(User).where(User.id == user_id))
@@ -67,6 +74,17 @@ class UserService(object):
         if user.type.lower() == UserType.GP.value:
             return True
         return False
+
+    @Transactional()
+    async def delete_user(self, user_id) -> None:
+        await session.execute(delete(User).where(User.id == user_id))
+
+    async def get_user_by_email(self, email) -> User:
+        result = await session.execute(
+            select(User).where(User.email == email)
+        )
+        user = result.scalars().first()
+        return user if user else None
 
 
 class GPService(object):

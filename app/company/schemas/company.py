@@ -24,6 +24,7 @@ class RecruitmentStatus(Enum):
 
 class CompanyRegistrationRequestSchema(BaseModel):
     company_name: str = Field(...)
+    union_id: int = Field(..., description='회사에 연결되는 투자조합 ID')
     logo_img_url: str = Field(..., description='회사 로고 이미지 url')
     main_banner_img_url: str = Field(..., description='메인 배너 이미지 url')
     product_name: str = Field(..., description='프로덕트 이름')

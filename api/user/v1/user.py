@@ -20,9 +20,11 @@ user_router = APIRouter()
 
 
 @user_router.get('/auth-key')
-async def get_authkey(request: Request, user_type: str = 'admin'):
+async def get_authkey(email: str):
+    user = await UserService().get_user_by_email(email)
+
     token_helper = TokenHelper()
-    token = token_helper.encode({'user_id': 2 if user_type == 'admin' else 1})
+    token = token_helper.encode({'user_id': user.id})
     return {'Authorization': f'bearer {token}'}
 
 
@@ -76,7 +78,8 @@ async def signup_kakao_user(request: UserLoginRequestSchema):
                 phone_number=request.phone_number,
                 email=request.email
             )
-            user = await UserService().create_user(**create_user_dict)
+            user_id = await UserService().create_user(**create_user_dict)
+            user = await UserService().get_user_by_id(user_id)
         else:
             raise KakaoUserIdNotRegisteredException
 
@@ -123,4 +126,14 @@ async def approve_gp(request: Request, gp_id):
         gp_id,
         confirmation_date
     )
+    return {'result': 'SUCCESS'}
+
+
+@user_router.delete(
+    '/delete-account',
+    responses={"400": {"model": ExceptionResponseSchema}},
+    dependencies=[Depends(PermissionDependency([IsAuthenticated]))]
+)
+async def delete_user(request: Request):
+    await UserService().delete_user(request.user.id)
     return {'result': 'SUCCESS'}

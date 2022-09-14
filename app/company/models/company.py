@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Date, DateTime, Float, Integer, String, Text
+from sqlalchemy import Column, Date, DateTime, Float, Integer, String, Text, null
 from sqlalchemy.ext.declarative import declarative_base
 
 
@@ -10,6 +10,7 @@ class Company(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     gp_id = Column(Integer, nullable=False)
+    union_id = Column(Integer, nullable=False)
     name = Column(String(20))
     logo_img_url = Column(Text)
     product_name = Column(String(20))

@@ -17,6 +17,7 @@ class CompanyService(object):
     async def create_company(
             self,
             gp_id: int,
+            union_id: int,
             company_name: str,
             logo_img_url: str,
             product_name: str,
@@ -45,6 +46,7 @@ class CompanyService(object):
     ) -> None:
         company = Company(
             gp_id=gp_id,
+            union_id=union_id,
             name=company_name,
             logo_img_url=logo_img_url,
             product_name=product_name,
