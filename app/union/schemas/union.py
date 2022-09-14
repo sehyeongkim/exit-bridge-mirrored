@@ -16,8 +16,8 @@ class UnionRegistrationRequestSchema(BaseModel):
     unit_share_price: int = Field(..., description='1좌당 금액')
     total_share_number: int = Field(..., description='총 출자좌수')
     total_share_price: int = Field(..., description='총 출자금액')
-    establishment_date: dt.datetime = Field(..., description='결성일자')
-    expire_date: dt.datetime = Field(..., description='만기일자')
+    establishment_date: str = Field(..., description='결성일자')
+    expire_date: str = Field(..., description='만기일자')
     status: Optional[UnionStatus] = Field(UnionStatus.RECRUITING.value, description='모집상태: 결성진행중|운용중|해산')
 
     class Config:
@@ -55,3 +55,16 @@ class UnionOverallResponseSchema(BaseModel):
     union_historial_status: UnionHistoricalStatus
     unions: List[Union]
     union_summary: UnionSummary
+
+
+class UnionInformationResponseSchema(BaseModel):
+    id: int
+    union_name: str
+    gp_id: int
+    company_id: int
+    unit_share_price: int
+    total_share_number: int
+    total_share_price: int
+    establishment_date: str
+    expire_date: str
+    confirmation_status: str
