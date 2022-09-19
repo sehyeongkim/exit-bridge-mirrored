@@ -18,8 +18,8 @@ class UnionService(object):
         sub_lps = select(
             sub_unions.c.id.label('union_id'),
             func.count(UnionsLimitedPartner.lp_id).label('total_lp_number')
-        ).join(
-            sub_unions, UnionsLimitedPartner.union_id == sub_unions.c.id
+        ).outerjoin(
+            UnionsLimitedPartner, sub_unions.c.id == UnionsLimitedPartner.union_id
         ).group_by(
             sub_unions.c.id
         ).subquery()
@@ -77,7 +77,7 @@ class UnionService(object):
             Company, Union.company_id == Company.id
         )
         result = await session.execute(stmt)
-        return result.scalars().all()
+        return result.all()
 
     async def get_union_historical_status(self, gp_id: int) -> dict:
         stmt = select(
@@ -89,7 +89,7 @@ class UnionService(object):
             Union.status
         )
         result = await session.execute(stmt)
-        return result.scalars().first()
+        return result.all()
 
     async def get_union_summary(self, gp_id: int) -> dict:
         sub_lps = await self.sub_get_lps_by_gp(gp_id)
@@ -102,7 +102,7 @@ class UnionService(object):
             sub_lps, Union.id == sub_lps.c.union_id
         )
         result = await session.execute(stmt)
-        return result.scalars().first()
+        return result.first()
 
     async def get_unions_detail_information(self, gp_id: int) -> list:
         stmt = select(
@@ -118,4 +118,4 @@ class UnionService(object):
             Union.status.label('confirmation_status')
         ).where(Union.gp_id == gp_id)
         result = await session.execute(stmt)
-        return result.scalars().all()
+        return result.all()

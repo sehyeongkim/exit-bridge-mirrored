@@ -135,22 +135,17 @@ class CompanyService(object):
             MainPost.id == main_post_id
         )
         result = await session.execute(stmt)
-        rows = result.all()
+        row = result.one()
 
-        for row in rows:
-            if 'http' in row.logo_img_url or not row.logo_img_url:
-                continue
-            if 'http' in row.dart_url or not row.dart_url:
-                continue
-            if 'http' in row.inobiz_url or not row.inobiz_url:
-                continue
-
+        if row.logo_img_url and 'http' not in row.logo_img_url:
             logo_img_url = await S3Service().get_s3_url(row.logo_img_url)
             row.logo_img_url = logo_img_url
 
+        if row.dart_url and 'http' not in row.dart_url:
             dart_url = await S3Service().get_s3_url(row.dart_url)
             row.dart_url = dart_url
 
+        if row.inobiz_url and 'http' not in row.inobiz_url:
             inobiz_url = await S3Service().get_s3_url(row.inobiz_url)
             row.inobiz_url = inobiz_url
-        return rows
+        return row
