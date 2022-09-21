@@ -81,7 +81,7 @@ class UnionService(object):
 
     async def get_union_historical_status(self, gp_id: int) -> dict:
         stmt = select(
-            func.count(Union.id).label('unions_number'),
+            func.count(Union.id).label('total_union_number'),
             Union.status
         ).where(
             Union.gp_id == gp_id
