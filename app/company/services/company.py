@@ -93,7 +93,7 @@ class CompanyService(object):
             Company.id.label('company_id'),
             Company.name.label('company_name'),
             MainPost.id.label('main_post_id'),
-            Company.logo_img_url,
+            Company.logo_img_s3_id,
             MainPost.intro,
             MainPost.is_open_to_public
         ).join(
@@ -105,10 +105,10 @@ class CompanyService(object):
         rows = result.all()
 
         for row in rows:
-            if 'http' in row.logo_img_url:
+            if 'http' in row.logo_img_s3_id:
                 continue
-            logo_img_url = await S3Service().get_s3_url(row.logo_img_url)
-            row.logo_img_url = logo_img_url
+            logo_img_url = await S3Service().get_s3_url(row.logo_img_s3_id)
+            row.logo_img_s3_id = logo_img_url
         return rows
 
     async def get_main_post(self, main_post_id: int) -> dict:
@@ -118,7 +118,7 @@ class CompanyService(object):
             MainPost.intro,
             MainPost.title,
             MainPost.is_open_to_public.label('is_activated'),
-            Company.logo_img_url,
+            Company.logo_img_s3_id,
             MainPost.updated_at,
             MainPost.recruitment_start_date,
             MainPost.recruitment_end_date,
@@ -137,9 +137,9 @@ class CompanyService(object):
         result = await session.execute(stmt)
         row = result.one()
 
-        if row.logo_img_url and 'http' not in row.logo_img_url:
-            logo_img_url = await S3Service().get_s3_url(row.logo_img_url)
-            row.logo_img_url = logo_img_url
+        if row.logo_img_s3_id and 'http' not in row.logo_img_s3_id:
+            logo_img_url = await S3Service().get_s3_url(row.logo_img_s3_id)
+            row.logo_img_s3_id = logo_img_url
 
         if row.dart_url and 'http' not in row.dart_url:
             dart_url = await S3Service().get_s3_url(row.dart_url)

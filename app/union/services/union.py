@@ -58,7 +58,7 @@ class UnionService(object):
             return True
         return False
 
-    async def get_unions(self, gp_id: int) -> list:
+    async def get_unions_detail(self, gp_id: int) -> list:
         sub_lps = await self.sub_get_lps_by_gp(gp_id)
         stmt = select(
             Union.id,
@@ -66,15 +66,21 @@ class UnionService(object):
             Union.company_id,
             Company.name.label('company_name'),
             Union.name.label('union_name'),
+            Union.unit_share_price,
+            Union.total_share_number,
+            Union.total_share_price,
             Union.establishment_date,
             Union.expire_date,
             Union.status.label('confirmation_status'),
             sub_lps.c.total_lp_number,
-            Union.total_share_price
+            Union.total_share_price,
+            MainPost.recruitment_status,
         ).join(
             sub_lps, Union.id == sub_lps.c.union_id
         ).join(
             Company, Union.company_id == Company.id
+        ).join(
+            MainPost, Union.company_id == MainPost.company_id
         )
         result = await session.execute(stmt)
         return result.all()
@@ -104,18 +110,9 @@ class UnionService(object):
         result = await session.execute(stmt)
         return result.first()
 
-    async def get_unions_detail_information(self, gp_id: int) -> list:
+    async def get_unions(self, gp_id: int) -> list:
         stmt = select(
-            Union.id,
-            Union.name.label('union_name'),
-            Union.gp_id,
-            Union.company_id,
-            Union.unit_share_price,
-            Union.total_share_number,
-            Union.total_share_price,
-            Union.establishment_date,
-            Union.expire_date,
-            Union.status.label('confirmation_status')
+            Union
         ).where(Union.gp_id == gp_id)
         result = await session.execute(stmt)
-        return result.all()
+        return result.scalars().all()

@@ -10,7 +10,7 @@ class ArticleJson(BaseModel):
     url: str = Field(..., description='기사 url')
     issue_date: dt.datetime = Field(..., description='기사 발행일')
     tags: Optional[List[str]] = Field(description='기사 태그')
-    thumbnail_urls: Optional[List[str]] = Field(description='썸네일 이미지 url')
+    thumbnail_s3_id: Optional[str] = Field(description='썸네일 이미지 s3 id')
 
     @validator('issue_date')
     def to_str(cls, v):
@@ -45,7 +45,7 @@ class CompanyRegistrationRequestSchema(BaseModel):
     main_post_intro: str = Field(..., description='메인 포스트 간단소개글')
     main_post_html_text: str = Field(..., description='위지위그 편집기 텍스트')
     attachment_json: Optional[List[str]] = Field(description='첨부파일 json')
-    article_json: Optional[ArticleJson] = Field(description='관련기사 json')
+    article_json: Optional[List[ArticleJson]] = Field(description='관련기사 json')
     recruitment_start_date: Optional[dt.datetime] = Field(None, description='모집시작일')
     recruitment_status: Optional[RecruitmentStatus] = Field(RecruitmentStatus.OPEN.value, description='모집상태: 모집중|모집마감')
     is_open_to_public: bool = Field(..., description='공개여부: 공개|비공개')

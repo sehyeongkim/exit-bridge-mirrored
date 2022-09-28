@@ -12,7 +12,7 @@ class Company(Base):
     gp_id = Column(Integer, nullable=False)
     union_id = Column(Integer, nullable=False)
     name = Column(String(20))
-    logo_img_url = Column(Text)
+    logo_img_s3_id = Column(Text)
     product_name = Column(String(20))
     investment_stage = Column(String(20))
     investment_method = Column(String(20))
@@ -27,7 +27,7 @@ class Company(Base):
     business_number = Column(String(30))
     venture_registration_number = Column(String(30))
     bond_issue_date = Column(Date)
-    main_banner_img_url = Column(Text)
+    main_banner_img_s3_id = Column(Text)
 
 
 class CompaniesLimitedPartner(Base):

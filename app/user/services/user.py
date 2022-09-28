@@ -149,8 +149,8 @@ class GPService(object):
                 gp_id=gp.id,
                 union_start_date=each.union_start_date,
                 union_end_date=each.union_end_date,
-                union_id_certificate_url=each.union_id_certificate_url,
-                union_investment_certificate_url=each.union_investment_certificate_url
+                union_id_certificate_url=each.union_id_certificate_s3_id,
+                union_investment_certificate_url=each.union_investment_certificate_s3_id
             )
             session.add(gp_union_establishment_experience)
 

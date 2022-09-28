@@ -17,7 +17,7 @@ class User(Base, TimestampMixin):
     type = Column(String(10), nullable=False, default=UserType.USER.value)  # user | lp | gp | admin
     access_token = Column(String(255))
     refresh_token = Column(String(255))
-    profile_img_url = Column(Text)
+    profile_img_s3_id = Column(Text)
     is_verified = Column(Boolean, default=False)
     zip_code = Column(String(10))
     road_name_address = Column(String(40))
@@ -53,8 +53,8 @@ class GeneralPartnerUnionEstablishmentExperience(Base):
     gp_id = Column(Integer, nullable=False)
     union_start_date = Column(Date)
     union_end_date = Column(Date)
-    union_id_certificate_url = Column(Text)
-    union_investment_certificate_url = Column(Text)
+    union_id_certificate_s3_id = Column(Text)
+    union_investment_certificate_s3_id = Column(Text)
 
 
 class LimitedPartner(Base):
@@ -73,7 +73,7 @@ class LimitedPartnerDetail(Base, TimestampMixin):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     lp_id = Column(Integer)  # index
-    signature_img_url = Column(Text)
+    signature_img_s3_id = Column(Text)
     decision_date = Column(DateTime)
     total_share_number = Column(Integer)
     personal_info_checkbox_json = Column(JSON)
@@ -89,7 +89,7 @@ class LpApplicationForm(Base, TimestampMixin):
     lp_id = Column(Integer, nullable=False)
     union_id = Column(Integer, nullable=False)
     company_id = Column(Integer, nullable=False)
-    signature_img_url = Column(Text)
+    signature_img_s3_id = Column(Text)
     decision_date = Column(DateTime)
     total_share_number = Column(Integer)
     personal_info_checkbox_json = Column(JSON)

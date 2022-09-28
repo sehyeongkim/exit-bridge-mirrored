@@ -4,7 +4,7 @@ CREATE TABLE `companies` (
 	`gp_id`	int	NOT NULL,
 	`union_id` int NOT NULL,
 	`name`	varchar(20)	NULL,
-	`logo_img_url`	text	NULL,
+	`logo_img_s3_id`	text	NULL,
 	`product_name`	varchar(20)	NULL,
 	`investment_stage`	varchar(20)	NULL,
 	`investment_method`	varchar(20)	NULL,
@@ -19,7 +19,7 @@ CREATE TABLE `companies` (
 	`business_number`	varchar(30)	NULL,
 	`venture_registration_number`	varchar(30)	NULL,
 	`bond_issue_date`	date	NULL,
-	`main_banner_img_url`	text	NULL
+	`main_banner_img_s3_id`	text	NULL
 );
 
 -- users
@@ -31,7 +31,7 @@ CREATE TABLE `users` (
 	`type`	varchar(10)	NOT NULL,
 	`access_token`	text	NULL,
 	`refresh_token`	text	NULL,
-	`profile_img_url`	text	NULL,
+	`profile_img_s3_id`	text	NULL,
 	`is_verified`	bool	NULL,
 	`zip_code`	varchar(10)	NULL,
 	`road_name_address`	varchar(100)	NULL,
@@ -82,7 +82,7 @@ CREATE TABLE `lp_application_forms` (
 	`user_id`	varchar(20)	NOT NULL,
 	`union_id`	int	NOT NULL,
 	`company_id`	int	NOT NULL,
-	`signature_img_url`	text	NULL,
+	`signature_img_s3_id`	text	NULL,
 	`decision_date`	datetime	NULL,
 	`total_share_number`	int	NULL,
 	`created_at`	datetime	NULL,
@@ -175,7 +175,7 @@ CREATE TABLE `limited_partners` (
 	`union_id`	int	NOT NULL,
 	`company_id`	int	NOT NULL,
 	`name`	varchar(20)	NULL,
-	`signature_img_url`	text	NULL,
+	`signature_img_s3_id`	text	NULL,
 	`decision_date`	datetime	NULL,
 	`number_of_shares`	int	NULL,
 	`income_deduction_applied_date`	int	NULL,
@@ -217,7 +217,7 @@ CREATE TABLE `user_types` (
 CREATE TABLE `limited_partner_details` (
 	`id`	int	NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	`lp_id`	int	NOT NULL,
-	`signature_img_url`	text	NULL,
+	`signature_img_s3_id`	text	NULL,
 	`decision_date`	datetime	NULL,
 	`total_share_number`	int	NULL,
 	`income_deduction_applied_date`	int	NULL,
@@ -241,8 +241,8 @@ CREATE TABLE `general_partner_union_establishment_experiences` (
 	`gp_id`	int	NOT NULL,
 	`union_start_date`	date	NULL,
 	`union_end_date`	date	NULL,
-	`union_id_certificate_url`	text	NULL,
-	`union_investment_certificate_url`	text	NULL
+	`union_id_certificate_s3_id`	text	NULL,
+	`union_investment_certificate_s3_id`	text	NULL
 );
 
 -- s3_buckets
