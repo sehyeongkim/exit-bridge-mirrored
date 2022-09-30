@@ -247,17 +247,10 @@ CREATE TABLE `general_partner_union_establishment_experiences` (
 
 -- s3_buckets
 CREATE TABLE `s3_buckets` (
-	`id`	varchar(100)	NOT NULL,
+	`id`	int	NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	`key_prefix`	varchar(255)	NULL,
 	`filename`	varchar(255)	NULL,
 	`bucket_name`	varchar(255)	NULL,
     `created_at`	datetime	NULL,
 	`updated_at`	datetime	NULL
 );
-
-ALTER TABLE `s3_buckets` ADD CONSTRAINT `MULTI_PK_S3_BUCKETS` PRIMARY KEY (
-	`filename`, `key_prefix`, `bucket_name`
-);
-
-CREATE UNIQUE INDEX UNIQUE_ID_S3_BUCKET
-On s3_buckets (id);

@@ -27,44 +27,47 @@ class Bucket:
         bucket_domain_url = config.AWS_S3_PUBLIC_BUCKET_CLOUDFRONT_DOMAIN_NAME
 
 
-class KeyPrefix:
-    class Sensitive(Enum):
-        gp = 'gp'
-        lp = 'lp'
-
-    class Public(Enum):
-        company = 'company'
-        feed = 'feed'
-
-
 class BucketManager:
-    def __init__(self, key_prefix, filename):
+    def __init__(self, key_prefix: str, filename: str, is_sensitive_bucket: bool):
         self.key_prefix = key_prefix
         self.filename = filename
         self.object_key_name = f'{key_prefix}/{filename}'
         self.s3_client_manager = S3ClientManager()
+        self.is_sensitive_bucket = is_sensitive_bucket
 
     @property
     def bucket_name(self):
         bucket_object = self.get_bucket_object()
-        if bucket_object:
-            return bucket_object.bucket_name
-        return None
+        return bucket_object.bucket_name
 
     @staticmethod
-    def get_key_prefix_by_object_key_name(object_key_name):
-        return object_key_name.lower().split('/')[0]
+    def get_separte_object_key_paths(object_key_name) -> tuple:
+        splited_object_key_name = object_key_name.lower().split('/')
+        join_paths = splited_object_key_name[:-1]
+        filename = splited_object_key_name[-1]
 
+        if not join_paths:
+            return object_key_name, filename
+
+        key_prefix = '/'.join(join_paths)
+        return key_prefix, filename
+
+    @property
     def get_bucket_object(self):
-        if self.key_prefix in KeyPrefix.Sensitive.__members__:
+        if self.is_sensitive_bucket:
             return Bucket.Sensitive
-
-        elif self.key_prefix in KeyPrefix.Public.__members__:
+        else:
             return Bucket.Public
-        return None
 
-    def get_object_url_for_read(self):
-        bucket_object = self.get_bucket_object()
+    @staticmethod
+    def is_sensitive_bucket(bucket_name):
+        if bucket_name == Bucket.Public.bucket_name:
+            return False
+        elif bucket_name == Bucket.Sensitive.bucket_name:
+            return True
+
+    def get_object_read_url(self):
+        bucket_object = self.get_bucket_object
         if isinstance(bucket_object, Bucket.Sensitive):
             url = self.s3_client_manager.get_presigned_url(
                 ClientMethods.get_object,
@@ -78,10 +81,10 @@ class BucketManager:
             raise
         return url
 
-    def get_object_url_for_upload(self):
+    def get_object_upload_url(self):
         bucket_object = self.get_bucket_object()
         url = self.s3_client_manager.get_presigned_url(
-            ClientMethods.put_object,
+            ClientMethods.put_object.value,
             bucket_object.bucket_name,
             self.object_key_name,
             config.AWS_S3_SENSITIVE_FILE_UPLOAD_EXPIRE_SECONDS

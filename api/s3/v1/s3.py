@@ -1,6 +1,6 @@
 import uuid
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request
 
 from app.user.schemas import *
 from app.s3.schemas import *
@@ -33,10 +33,16 @@ async def upload_to_s3(
     responses={"400": {"model": ExceptionResponseSchema}},
     dependencies=[Depends(PermissionDependency([IsAuthenticated]))]
 )
-async def get_s3_presigned_url_for_upload(request: S3UploadRequestSchema):
-    bucket_manager = BucketManager(request.key_prefix, request.filename)
-    url = bucket_manager.get_object_url_for_upload()
-    return {'result': url}
+async def get_s3_presigned_url_for_upload(request: Request, s3_upload: S3UploadRequestSchema):
+    random_filename = str(uuid.uuid4())
+    bucket_manager = BucketManager(request.user.id, random_filename, s3_upload.is_sensitive_bucket)
+    url = bucket_manager.get_object_upload_url()
+    result = dict(
+        presigned_url=url,
+        object_key_name=bucket_manager.object_key_name,
+        is_sensitive_bucket=s3_upload.is_sensitive_bucket
+    )
+    return {'result': result}
 
 
 @s3_router.post(
@@ -44,13 +50,16 @@ async def get_s3_presigned_url_for_upload(request: S3UploadRequestSchema):
     responses={"400": {"model": ExceptionResponseSchema}},
     dependencies=[Depends(PermissionDependency([IsAuthenticated]))]
 )
-async def get_s3_id_after_upload(request: S3UploadRequestSchema):
-    s3_id = str(uuid.uuid4())
-    bucket_manager = BucketManager(request.key_prefix, request.filename)
-    await S3Service().create_s3_bucket_object(
-        s3_id,
-        request.key_prefix,
-        request.filename,
+async def get_s3_id_after_upload(request: S3UploadSuccessRequestSchema):
+    key_prefix, filename = BucketManager.get_separte_object_key_paths(request.object_key_name)
+
+    bucket_manager = BucketManager(key_prefix, filename, request.is_sensitive_bucket)
+    s3_id = await S3Service().create_s3_bucket_object(
+        key_prefix,
+        filename,
         bucket_manager.bucket_name
     )
-    return {'result': s3_id}
+    result = dict(
+        s3_id=s3_id
+    )
+    return {'result': result}
