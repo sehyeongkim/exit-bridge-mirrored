@@ -37,7 +37,7 @@ class BucketManager:
 
     @property
     def bucket_name(self):
-        bucket_object = self.get_bucket_object()
+        bucket_object = self.get_bucket_object
         return bucket_object.bucket_name
 
     @staticmethod
@@ -55,9 +55,9 @@ class BucketManager:
     @property
     def get_bucket_object(self):
         if self.is_sensitive_bucket:
-            return Bucket.Sensitive
+            return Bucket.Sensitive()
         else:
-            return Bucket.Public
+            return Bucket.Public()
 
     @staticmethod
     def is_sensitive_bucket(bucket_name):
@@ -70,7 +70,7 @@ class BucketManager:
         bucket_object = self.get_bucket_object
         if isinstance(bucket_object, Bucket.Sensitive):
             url = self.s3_client_manager.get_presigned_url(
-                ClientMethods.get_object,
+                ClientMethods.get_object.value,
                 bucket_object.bucket_name,
                 self.object_key_name,
                 config.AWS_S3_SENSITIVE_FILE_DOWNLOAD_EXPIRE_SECONDS
@@ -82,7 +82,7 @@ class BucketManager:
         return url
 
     def get_object_upload_url(self):
-        bucket_object = self.get_bucket_object()
+        bucket_object = self.get_bucket_object
         url = self.s3_client_manager.get_presigned_url(
             ClientMethods.put_object.value,
             bucket_object.bucket_name,
