@@ -51,7 +51,7 @@ async def get_s3_presigned_url_for_upload(request: Request, s3_upload: S3UploadR
     dependencies=[Depends(PermissionDependency([IsAuthenticated]))]
 )
 async def get_s3_id_after_upload(request: S3UploadSuccessRequestSchema):
-    key_prefix, filename = BucketManager.get_separte_object_key_paths(request.object_key_name)
+    key_prefix, filename = BucketManager.get_separate_object_key_paths(request.object_key_name)
 
     bucket_manager = BucketManager(key_prefix, filename, request.is_sensitive_bucket)
     s3_id = await S3Service().create_s3_bucket_object(

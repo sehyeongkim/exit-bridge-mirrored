@@ -41,7 +41,7 @@ class BucketManager:
         return bucket_object.bucket_name
 
     @staticmethod
-    def get_separte_object_key_paths(object_key_name) -> tuple:
+    def get_separate_object_key_paths(object_key_name) -> tuple:
         splited_object_key_name = object_key_name.lower().split('/')
         join_paths = splited_object_key_name[:-1]
         filename = splited_object_key_name[-1]

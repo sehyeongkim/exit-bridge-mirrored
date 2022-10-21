@@ -4,8 +4,7 @@ import typing
 from sqlalchemy import or_, select, update, delete
 from app.union.models import *
 from app.company.models import *
-from app.company.schemas import RecruitmentStatus, ArticleJson
-from app.s3.services import S3Service
+from app.s3.services import S3UrlConverter
 from core.db import Transactional, Propagation, session
 
 
@@ -92,8 +91,9 @@ class CompanyService(object):
         stmt = select(
             Company.id.label('company_id'),
             Company.name.label('company_name'),
-            MainPost.id.label('main_post_id'),
             Company.logo_img_s3_id,
+            MainPost.id.label('main_post_id'),
+            Company.main_banner_img_s3_id,
             MainPost.intro,
             MainPost.is_open_to_public
         ).join(
@@ -103,13 +103,8 @@ class CompanyService(object):
             stmt = stmt.where(Company.name.like(f'%{q}%'))
         result = await session.execute(stmt)
         rows = result.all()
-
-        for row in rows:
-            if 'http' in row.logo_img_s3_id:
-                continue
-            logo_img_url = await S3Service().get_s3_url(row.logo_img_s3_id)
-            row.logo_img_s3_id = logo_img_url
-        return rows
+        mapped_rows = await S3UrlConverter().map_from_s3_id_to_url(rows)
+        return mapped_rows
 
     async def get_main_post(self, main_post_id: int) -> dict:
         stmt = select(
@@ -119,6 +114,7 @@ class CompanyService(object):
             MainPost.title,
             MainPost.is_open_to_public.label('is_activated'),
             Company.logo_img_s3_id,
+            Company.main_banner_img_s3_id,
             MainPost.updated_at,
             MainPost.recruitment_start_date,
             MainPost.recruitment_end_date,
@@ -136,16 +132,5 @@ class CompanyService(object):
         )
         result = await session.execute(stmt)
         row = result.one()
-
-        if row.logo_img_s3_id and 'http' not in row.logo_img_s3_id:
-            logo_img_url = await S3Service().get_s3_url(row.logo_img_s3_id)
-            row.logo_img_s3_id = logo_img_url
-
-        if row.dart_url and 'http' not in row.dart_url:
-            dart_url = await S3Service().get_s3_url(row.dart_url)
-            row.dart_url = dart_url
-
-        if row.inobiz_url and 'http' not in row.inobiz_url:
-            inobiz_url = await S3Service().get_s3_url(row.inobiz_url)
-            row.inobiz_url = inobiz_url
-        return row
+        mapped_rows = await S3UrlConverter().map_from_s3_id_to_url(row)
+        return mapped_rows[0]
