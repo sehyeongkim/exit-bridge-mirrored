@@ -32,7 +32,7 @@ async def register_union(union_request: UnionRegistrationRequestSchema, gp_id: i
     "/gp/union/status",
     responses={
         "400": {"model": ExceptionResponseSchema},
-        # "200": {"model": UnionOverallResponseSchema}
+        "200": {"model": UnionOverallResponseSchema}
     },
     dependencies=[Depends(PermissionDependency([IsGP]))]
 )
@@ -41,11 +41,9 @@ async def get_overall_union_status(gp_id: int = Depends(get_gp_id)):
     union_historical_status = await UnionService().get_union_historical_status(gp_id)
     union_summary = await UnionService().get_union_summary(gp_id)
     result = {
-        'result': {
-            'unions': unions,
-            'union_historical_status': union_historical_status,
-            'union_summary': union_summary
-        }
+        'unions': unions,
+        'union_historical_status': union_historical_status,
+        'union_summary': union_summary
     }
     return JSONResponse(content=jsonable_encoder(result), status_code=200)
 
@@ -53,16 +51,13 @@ async def get_overall_union_status(gp_id: int = Depends(get_gp_id)):
 @union_router.get(
     '/gp/union/detail',
     responses={'400': {'model': ExceptionResponseSchema},
-               # '200': {'model': UnionInformationResponseSchema}
+               '200': {'model': UnionInformationResponseSchema}
                },
     dependencies=[Depends(PermissionDependency([IsGP]))]
 )
 async def get_unions_information(gp_id: int = Depends(get_gp_id)):
     unions = await UnionService().get_unions_detail(gp_id)
-    result = {
-        'result': unions
-    }
-    return JSONResponse(content=jsonable_encoder(result), status_code=200)
+    return JSONResponse(content=jsonable_encoder(unions), status_code=200)
 
 
 @union_router.get(
