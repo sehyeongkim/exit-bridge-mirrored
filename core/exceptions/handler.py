@@ -8,6 +8,15 @@ from core.exceptions.base import CustomException
 
 
 def init_listeners(app: FastAPI) -> None:
+
+    @app.exception_handler(Exception)
+    async def exception_handler(request: Request, exc: Exception):
+        traceback.print_exc()
+        return JSONResponse(
+            status_code=500,
+            content={"error_code": 500, "message": "Unexpected exception happened"}
+        )
+
     @app.exception_handler(CustomException)
     async def custom_exception_handler(request: Request, exc: CustomException):
         traceback.print_exc()
@@ -20,6 +29,6 @@ def init_listeners(app: FastAPI) -> None:
     async def request_validation_exception_handler(request: Request, exc: RequestValidationError):
         traceback.print_exc()
         return JSONResponse(
-            status_code=400,
-            content={'error_code': 400, 'message': 'Invalid Request'}
+            status_code=422,
+            content={"error_code": 422, "message": 'Invalid Request'}
         )
