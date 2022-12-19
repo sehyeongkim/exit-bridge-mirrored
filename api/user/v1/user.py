@@ -19,7 +19,11 @@ from core.utils.token_helper import TokenHelper
 user_router = APIRouter()
 
 
-@user_router.get('/auth-key')
+@user_router.get(
+    '/auth-key',
+    responses={"500": {"model": ExceptionResponseSchema},
+               "422": {"model": RequestValidationExceptionResponseSchema}}
+)
 async def get_authkey(email: str):
     user = await UserService().get_user_by_email(email)
 
@@ -33,7 +37,8 @@ async def get_authkey(email: str):
     "",
     response_model=List[GetUserListResponseSchema],
     response_model_exclude={"id"},
-    responses={"400": {"model": ExceptionResponseSchema}},
+    responses={"500": {"model": ExceptionResponseSchema},
+               "422": {"model": RequestValidationExceptionResponseSchema}},
     dependencies=[Depends(PermissionDependency([IsAdmin]))],
 )
 async def get_user_list(
@@ -46,7 +51,8 @@ async def get_user_list(
 @user_router.post(
     '/login',
     response_model=Dict[str, UserLoginResponseSchema],
-    responses={"400": {"model": ExceptionResponseSchema}},
+    responses={"500": {"model": ExceptionResponseSchema},
+               "422": {"model": RequestValidationExceptionResponseSchema}},
 )
 async def signup_kakao_user(request: UserLoginRequestSchema):
     headers = {'Authorization': f'Bearer {request.kakao_access_token}'}
@@ -100,7 +106,8 @@ async def signup_kakao_user(request: UserLoginRequestSchema):
 
 @user_router.post(
     '/gp/application',
-    responses={"400": {"model": ExceptionResponseSchema}},
+    responses={"500": {"model": ExceptionResponseSchema},
+               "422": {"model": RequestValidationExceptionResponseSchema}},
     dependencies=[Depends(PermissionDependency([IsAuthenticated]))]
 )
 async def register_gp_application(request: Request, gp_application_request: GPApplicationRequestSchema):
@@ -113,7 +120,8 @@ async def register_gp_application(request: Request, gp_application_request: GPAp
 
 @user_router.post(
     '/gp/approve',
-    responses={"400": {"model": ExceptionResponseSchema}},
+    responses={"500": {"model": ExceptionResponseSchema},
+               "422": {"model": RequestValidationExceptionResponseSchema}},
     dependencies=[Depends(PermissionDependency([IsAdmin]))]
 )
 async def approve_gp(request: Request, gp_id):
@@ -131,7 +139,8 @@ async def approve_gp(request: Request, gp_id):
 
 @user_router.delete(
     '/delete-account',
-    responses={"400": {"model": ExceptionResponseSchema}},
+    responses={"500": {"model": ExceptionResponseSchema},
+               "422": {"model": RequestValidationExceptionResponseSchema}},
     dependencies=[Depends(PermissionDependency([IsAuthenticated]))]
 )
 async def delete_user(request: Request):

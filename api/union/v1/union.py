@@ -14,7 +14,8 @@ union_router = APIRouter()
 
 @union_router.post(
     '',
-    responses={"400": {"model": ExceptionResponseSchema}},
+    responses={"500": {"model": ExceptionResponseSchema},
+               "422": {'model': RequestValidationExceptionResponseSchema}},
     dependencies=[Depends(PermissionDependency([IsGP]))]
 )
 async def register_union(union_request: UnionRegistrationRequestSchema, gp_id: int = Depends(get_gp_id)):
@@ -31,7 +32,8 @@ async def register_union(union_request: UnionRegistrationRequestSchema, gp_id: i
 @union_router.get(
     "/gp/union/status",
     responses={
-        "400": {"model": ExceptionResponseSchema},
+        "500": {"model": ExceptionResponseSchema},
+        "422": {"model": RequestValidationExceptionResponseSchema},
         "200": {"model": UnionOverallResponseSchema}
     },
     dependencies=[Depends(PermissionDependency([IsGP]))]
@@ -50,7 +52,8 @@ async def get_overall_union_status(gp_id: int = Depends(get_gp_id)):
 
 @union_router.get(
     '/gp/union/detail',
-    responses={'400': {'model': ExceptionResponseSchema},
+    responses={'500': {'model': ExceptionResponseSchema},
+               '422': {'model': RequestValidationExceptionResponseSchema},
                '200': {'model': UnionInformationResponseSchema}
                },
     dependencies=[Depends(PermissionDependency([IsGP]))]
@@ -62,7 +65,9 @@ async def get_unions_information(gp_id: int = Depends(get_gp_id)):
 
 @union_router.get(
     '/gp/union',
-    responses={'400': {'model': ExceptionResponseSchema}},
+    responses={'500': {'model': ExceptionResponseSchema},
+               '422': {'model': RequestValidationExceptionResponseSchema,}
+               },
     dependencies=[Depends(PermissionDependency([IsGP]))]
 )
 async def get_unions(gp_id: int = Depends(get_gp_id)):
