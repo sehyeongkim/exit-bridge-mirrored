@@ -1,4 +1,6 @@
 # Exit-Bridge
+### 프로젝트 설명
+투자조합 매칭 플랫폼. GP(General Partner)와 LP(Limited Partner)를 매칭해주고, GP가 조합을 운용하면서 필요했던 관리들을 한 곳에서 모아서 관리할 수 있도록 합니다.
 
 ### 서버 실행방법
 1. 프로젝트 최상단에 dev.env.sample 내용 참고하여 dev.env config 파일 신규 작성
