@@ -18,7 +18,8 @@ company_router = APIRouter()
 
 @company_router.post(
     '',
-    responses={"400": {"model": ExceptionResponseSchema}},
+    responses={"500": {"model": ExceptionResponseSchema},
+               "422": {"model": RequestValidationExceptionResponseSchema}},
     dependencies=[Depends(PermissionDependency([IsGP]))]
 )
 async def register_company(company_request: CompanyRegistrationRequestSchema, gp_id: int = Depends(get_gp_id)):
@@ -34,8 +35,9 @@ async def register_company(company_request: CompanyRegistrationRequestSchema, gp
 
 @company_router.get(
     '/search',
-    responses={'400': {'model': ExceptionResponseSchema},
-               # '200': {'model': CompanyPostResponseSchema}
+    responses={'500': {'model': ExceptionResponseSchema},
+               '422': {'model': RequestValidationExceptionResponseSchema},
+               '200': {'model': CompanyPostResponseSchema}
                }
 )
 async def get_companies_post(q: Optional[str] = None):
@@ -48,23 +50,20 @@ async def get_companies_post(q: Optional[str] = None):
             closed.append(post)
 
     result = {
-        'result': {
-            'open': opened,
-            'closed': closed
-        }
+        'open': opened,
+        'closed': closed
     }
     return JSONResponse(content=jsonable_encoder(result), status_code=200)
 
 
 @company_router.get(
     '/post',
-    responses={'400': {'model': ExceptionResponseSchema},
-               # '200': {'model': CompanyPostResponseSchema}
+    responses={'500': {'model': ExceptionResponseSchema},
+               '422': {'model': RequestValidationExceptionResponseSchema},
+               '200': {'model': CompanyPostResponseSchema}
                }
 )
 async def get_main_post(main_post_id: int):
     main_post = await CompanyService().get_main_post(main_post_id)
-    result = {
-        'result': main_post
-    }
-    return JSONResponse(content=jsonable_encoder(result), status_code=200)
+    fdsf
+    return JSONResponse(content=jsonable_encoder(main_post), status_code=200)

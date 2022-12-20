@@ -17,7 +17,8 @@ s3_router = APIRouter()
 
 @s3_router.post(
     '/upload/file',
-    responses={"400": {"model": ExceptionResponseSchema}},
+    responses={"500": {"model": ExceptionResponseSchema},
+               "422": {"model": RequestValidationExceptionResponseSchema}},
     dependencies=[Depends(PermissionDependency([IsAuthenticated]))]
 )
 async def upload_to_s3(
@@ -30,7 +31,8 @@ async def upload_to_s3(
 
 @s3_router.post(
     '/upload/presigned-url',
-    responses={"400": {"model": ExceptionResponseSchema}},
+    responses={"500": {"model": ExceptionResponseSchema},
+               "422": {"model": RequestValidationExceptionResponseSchema}},
     dependencies=[Depends(PermissionDependency([IsAuthenticated]))]
 )
 async def get_s3_presigned_url_for_upload(request: Request, s3_upload: S3UploadRequestSchema):
@@ -47,7 +49,8 @@ async def get_s3_presigned_url_for_upload(request: Request, s3_upload: S3UploadR
 
 @s3_router.post(
     '/upload/presigned-url/after-upload',
-    responses={"400": {"model": ExceptionResponseSchema}},
+    responses={"500": {"model": ExceptionResponseSchema},
+               "422": {"model": RequestValidationExceptionResponseSchema}},
     dependencies=[Depends(PermissionDependency([IsAuthenticated]))]
 )
 async def get_s3_id_after_upload(request: S3UploadSuccessRequestSchema):
